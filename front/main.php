@@ -35,6 +35,7 @@
                     margin: auto;
                     overflow: hidden;
                     display: flex;
+                    position: relative;
                 }
 
                 .btn {
@@ -42,6 +43,7 @@
                     height: 100px;
                     flex-shrink: 0;
                     text-align: center;
+                    position: relative;
                 }
 
                 .btn>img {
@@ -116,6 +118,7 @@
     let now = 0;
     let next = 0;
     let timer = setInterval(slide, 3000);
+    let p = 0;
 
     function slide(n) {
         let ani = $('.list').eq(now).data('ani');
@@ -147,4 +150,34 @@
         }
         now = next;
     }
+    $('.left,.right').on('click', function() {
+        let arrow = $(this).attr('class');
+        // console.log(arrow);
+        switch (arrow) {
+            case "right":
+                if (p + 1 <= total - 4) {
+                    p++
+                }
+                break;
+            case "left":
+                if (p - 1 >= 0) {
+                    p--
+                }
+                break;
+
+        }
+        $('.btn').animate({
+            right: 90 * p
+        })
+    })
+    $('.btn').hover(function() {
+        clearInterval(timer);
+    }, function() {
+        timer = setInterval(slide, 3000)
+    })
+    $('.btn').on('click', function() {
+        let idx = $(this).index();
+        // console.log(idx);
+        setInterval(slide(idx), 3000)
+    })
 </script>
