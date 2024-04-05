@@ -113,3 +113,10 @@ class DB
 $Poster = new DB('poster');
 $Movie = new DB('movie');
 $Order = new DB('orders');
+
+$level = [
+    1 => "普遍級",
+    2 => "保護級",
+    3 => "輔導級",
+    4 => "限制級",
+];
