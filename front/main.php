@@ -69,6 +69,8 @@
             </style>
             <ul class="lists">
                 <?php
+                $today = date("Y-m-d");
+                $before = date("Y-m-d", strtotime("- 2days"));
                 $posters = $Poster->all(['sh' => 1], "order by rank");
                 foreach ($posters as $poster) {
                 ?>
@@ -159,7 +161,7 @@ $('.left,.right').on('click', function() {
 tr {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -169,8 +171,16 @@ td {
     border: 1px solid #eee;
     display: flex;
     padding: 2px;
-    height: 160px;
+    height: 147px;
     align-items: center;
+}
+
+.introbtn,
+.orderbtn {
+    font-size: 10px;
+    min-width: 45px;
+    min-height: 30px;
+    margin: 2px;
 }
 </style>
 <div class="half" style="padding:0;width:49%;">
@@ -180,12 +190,12 @@ td {
             <tbody>
                 <tr>
                     <?php
-                    $total = $Movie->count(['sh' => 1],);
+                    $total = $Movie->count("where `sh`=1 && `ondate` between '$before' and '$today' order by rank");
                     $div = 4;
                     $pages = ceil($total / $div);
                     $now = ($_GET['p']) ?? 1;
                     $start = ($now - 1) * $div;
-                    $movies = $Movie->all(['sh' => 1], "order by rank limit $start,$div");
+                    $movies = $Movie->all("where `sh`=1 && `ondate` between '$before' and '$today' order by rank limit $start,$div");
                     foreach ($movies as $movie) {
                     ?>
                     <td>
@@ -195,6 +205,8 @@ td {
                             <div>分級:<img src="./icon/03C0<?= $movie['level'] ?>.png"
                                     style="width:20px;"><?= $level[$movie['level']] ?></div>
                             <div>上映日期:<?= $movie['ondate'] ?></div>
+                            <div><button class="introbtn" data-id=<?= $movie['id'] ?>>劇情介紹</button><button
+                                    class="orderbtn" data-id=<?= $movie['id'] ?>>線上訂票</button></div>
                         </div>
                     </td>
                     <?php
@@ -203,6 +215,33 @@ td {
                 </tr>
             </tbody>
         </table>
-        <div class="ct"> </div>
+        <style>
+        .pages a {
+            color: #fff;
+            text-decoration: none;
+        }
+        </style>
+        <div class="ct pages">
+            <?php
+            for ($i = 1; $i <= $pages; $i++) {
+                $style = ($i == $now) ? "style='font-size:20px'" : "";
+                echo "<a href='?do=main&p=$i' $style>$i</a>";
+            }
+            ?>
+        </div>
     </div>
 </div>
+<script>
+$('.introbtn,.orderbtn').on('click', function() {
+    let type = $(this).attr('class');
+    let id = $(this).data('id');
+    switch (type) {
+        case "introbtn":
+            location.href = "?do=intro&id=" + id;
+            break;
+        case "orderbtn":
+            location.href = "?do=order&id=" + id;
+            break;
+    }
+})
+</script>
