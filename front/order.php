@@ -1,25 +1,25 @@
 <h1 class="ct">線上訂票</h1>
 <style>
-.ordsect {
-    width: 50%;
-}
-
-.ordsect td:nth-child(2) {
-    width: 80%;
-
-    select {
-        width: 100%;
+    .ordsect {
+        width: 50%;
     }
-}
 
-.ordsect td {
-    padding: 5px 10px;
-    background: #aaa;
-}
+    .ordsect td:nth-child(2) {
+        width: 80%;
 
-.ordsect tr {
-    margin: 5px 0;
-}
+        select {
+            width: 100%;
+        }
+    }
+
+    .ordsect td {
+        padding: 5px 10px;
+        background: #aaa;
+    }
+
+    .ordsect tr {
+        margin: 5px 0;
+    }
 </style>
 <table class="ordsect" style="margin:auto">
     <tr>
@@ -41,11 +41,46 @@
     </tr>
 </table>
 <script>
-getmovie();
-
-function getmovie() {
-    $.post('./api/getmovie.php', function(res) {
-        console.log(res)
+    let now = (<?= $_GET['id'] ?>) ?? 0;
+    // console.log(now)
+    getmovie(now);
+    $('#movie').on('change', function() {
+        let movie = $('#movie').val();
+        getdate(movie)
     })
-}
+    $('#date').on('change', function() {
+        let movie = $('#movie').val();
+        let date = $('#date').val();
+        getsess(movie, date)
+    })
+
+    function getmovie(now) {
+        $.post('./api/getmovie.php', {
+            now
+        }, function(res) {
+            $('#movie').html(res);
+            let movie = $('#movie').val();
+            getdate(movie)
+        })
+    }
+
+    function getdate(movie) {
+        $.post('./api/getdate.php', {
+            movie
+        }, function(res) {
+            $('#date').html(res);
+            let movie = $('#movie').val();
+            let date = $('#date').val();
+            getsess(movie, date)
+        })
+    }
+
+    function getsess(movie, date) {
+        $.post('./api/getsess.php', {
+            movie,
+            date
+        }, function(res) {
+            $('#sess').html(res)
+        })
+    }
 </script>
