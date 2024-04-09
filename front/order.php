@@ -1,27 +1,27 @@
 <h1 class="ct">線上訂票</h1>
 <style>
-    .ordsect {
-        width: 50%;
-    }
+.ordsect {
+    width: 50%;
+}
 
-    .ordsect td:nth-child(2) {
-        width: 80%;
+.ordsect td:nth-child(2) {
+    width: 80%;
 
-        select {
-            width: 100%;
-        }
+    select {
+        width: 100%;
     }
+}
 
-    .ordsect td {
-        padding: 5px 10px;
-        background: #aaa;
-    }
+.ordsect td {
+    padding: 5px 10px;
+    background: #aaa;
+}
 
-    .ordsect tr {
-        margin: 5px 0;
-    }
+.ordsect tr {
+    margin: 5px 0;
+}
 </style>
-<form action="./api/order.php" method="post">
+<form action="?do=book" method="post">
     <table class="ordsect" style="margin:auto">
         <tr>
             <td>電影:</td>
@@ -43,45 +43,45 @@
     </table>
 </form>
 <script>
-    let now = <?= $_GET['id']; ?>;
-    getmovie(now);
-    $('#movie').on('change', function() {
+let now = <?= $_GET['id']; ?>;
+getmovie(now);
+$('#movie').on('change', function() {
+    let movie = $('#movie').val();
+    getdate(movie)
+})
+$('#date').on('change', function() {
+    let movie = $('#movie').val();
+    let date = $('#date').val();
+    getsess(movie, date)
+})
+
+function getmovie(now) {
+    $.post('./api/getmovie.php', {
+        now
+    }, function(res) {
+        $('#movie').html(res);
         let movie = $('#movie').val();
         getdate(movie)
     })
-    $('#date').on('change', function() {
+}
+
+function getdate(movie) {
+    $.post('./api/getdate.php', {
+        movie
+    }, function(res) {
+        $('#date').html(res);
         let movie = $('#movie').val();
         let date = $('#date').val();
         getsess(movie, date)
     })
+}
 
-    function getmovie(now) {
-        $.post('./api/getmovie.php', {
-            now
-        }, function(res) {
-            $('#movie').html(res);
-            let movie = $('#movie').val();
-            getdate(movie)
-        })
-    }
-
-    function getdate(movie) {
-        $.post('./api/getdate.php', {
-            movie
-        }, function(res) {
-            $('#date').html(res);
-            let movie = $('#movie').val();
-            let date = $('#date').val();
-            getsess(movie, date)
-        })
-    }
-
-    function getsess(movie, date) {
-        $.post('./api/getsess.php', {
-            movie,
-            date
-        }, function(res) {
-            $('#sess').html(res)
-        })
-    }
+function getsess(movie, date) {
+    $.post('./api/getsess.php', {
+        movie,
+        date
+    }, function(res) {
+        $('#sess').html(res)
+    })
+}
 </script>
