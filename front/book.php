@@ -31,39 +31,48 @@
     #info {
         width: 540px;
         box-sizing: border-box;
-        padding: 19px 112px 0 112px;
+        padding: 19px 90px 0 90px;
         margin: auto;
     }
 
-    #info span {
+    #info input {
+        border: 0;
+        background: transparent;
         color: red;
+        width: 100px;
+    }
+
+    #info .num {
+        width: 10px;
     }
 </style>
-<div id="room">
-    <div id="seats">
-        <?php
-        for ($i = 0; $i < 20; $i++) {
-            $col = floor($i / 5) + 1;
-            $num = ($i % 5) + 1;
-        ?>
-            <div class="seat">
-                <div><?= $col ?>排<?= $num ?>號</div>
-                <div><img src="./icon/03D02.png" alt=""></div>
-                <input type="checkbox" name="seat[]" class="chk" value="<?= $i ?>">
-            </div>
-        <?php
-        }
-        ?>
+<form action="./api/book.php" method="post">
+    <div id="room">
+        <div id="seats">
+            <?php
+            for ($i = 0; $i < 20; $i++) {
+                $col = floor($i / 5) + 1;
+                $num = ($i % 5) + 1;
+            ?>
+                <div class="seat">
+                    <div><?= $col ?>排<?= $num ?>號</div>
+                    <div><img src="./icon/03D02.png" alt=""></div>
+                    <input type="checkbox" name="seats[]" class="chk" value="<?= $i ?>">
+                </div>
+            <?php
+            }
+            ?>
 
+        </div>
     </div>
-</div>
-<section id="info">
-    <div>您選擇的電影是 : <span><?= $_POST['movie'] ?></span></div>
-    <div>您選擇的時刻是 : <span><?= $_POST['date'] ?> <?= $_POST['sess'] ?></span></div>
-    <div>您已勾選了<span class="num">0</span>張票，最多可以購買<span>4</span>張票</div>
+    <section id="info">
+        <div>您選擇的電影是 : <input type="text" name="movie" value="<?= $_POST['movie'] ?>" readonly></div>
+        <div>您選擇的時刻是 : <input type="text" name="date" value="<?= $_POST['date'] ?>" readonly><input type="text" name="sess" value="<?= $_POST['sess'] ?>" readonly></span></div>
+        <div>您已勾選了<input type="text" name="qt" value="0" readonly class="num">張票，最多可以購買<span style="color:red">4</span>張票</div>
+    </section>
     <div style="text-align:center;"><input type="button" value="上一步" onclick="history.go(-1)" style="margin:0 2px;"><input type="submit" value="訂購" style="margin:0 2px;">
     </div>
-</section>
+</form>
 <Script>
     let total = 0;
     let seats = new Array();
@@ -81,7 +90,7 @@
             total--;
             seats.splice(seats.indexOf($(this).val()))
         }
-        console.log(seats)
-        $('.num').text(total)
+        // console.log(seats)
+        $('.num').val(total)
     })
 </Script>
