@@ -50,14 +50,15 @@
     <div id="room">
         <div id="seats">
             <?php
+            $seats = unserialize($Order->find(['movie' => $_POST['movie'], 'date' => $_POST['date'], 'sess' => $_POST['sess']])['seats']);
             for ($i = 0; $i < 20; $i++) {
                 $col = floor($i / 5) + 1;
                 $num = ($i % 5) + 1;
             ?>
                 <div class="seat">
                     <div><?= $col ?>排<?= $num ?>號</div>
-                    <div><img src="./icon/03D02.png" alt=""></div>
-                    <input type="checkbox" name="seats[]" class="chk" value="<?= $i ?>">
+                    <div><img src="./icon/03D<?= (in_array($i, $seats)) ? '03' : '02' ?>.png" alt=""></div>
+                    <input type="checkbox" name="seats[]" class="chk" value="<?= $i ?>" <?= (in_array($i, $seats)) ? 'disabled' : '' ?>>
                 </div>
             <?php
             }
