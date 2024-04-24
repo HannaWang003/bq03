@@ -1,27 +1,27 @@
 <style>
-table {
-    width: 100%;
-}
+    table {
+        width: 100%;
+    }
 
-table,
-tr,
-th,
-td {
-    border-collapse: collapse;
-}
+    table,
+    tr,
+    th,
+    td {
+        border-collapse: collapse;
+    }
 
-td {
-    text-align: center;
-    border-bottom: 1px solid #333;
-}
+    td {
+        text-align: center;
+        border-bottom: 1px solid #333;
+    }
 
-img {
-    width: 90px;
-}
+    img {
+        width: 90px;
+    }
 
-tbody {
-    height: 200px;
-}
+    tbody {
+        height: 200px;
+    }
 </style>
 <form action="./api/poster.php" method="post">
     <div style="height:300px;overflow:auto">
@@ -48,23 +48,23 @@ tbody {
                     $up = ($idx == 0) ? $idx : $idx - 1;
                     $down = ($idx == ($total - 1)) ? $idx : $idx + 1;
                 ?>
-                <tr>
-                    <td><img src="./img/<?= $poster['img'] ?>"></td>
-                    <td><input type="text" name="text[]" value="<?= $poster['text'] ?>"></td>
-                    <td>
-                        <button type="button" data-chg="<?= $posters[$up]['id'] ?>">往上</button>
-                        <button type="button" data-chg="<?= $posters[$down]['id'] ?>">往下</button>
-                        <select name="ani[]">
-                            <option value="1">淡入淡出</option>
-                            <option value="2">縮放</option>
-                            <option value="3">滑入滑出</option>
-                        </select>
-                    </td>
-                    <td><input type="checkbox" name="sh[]" value="<?= $poster['id'] ?>"
-                            <?= ($poster['sh'] == 1) ? "checked" : "" ?>>隱藏
-                        <input type="checkbox" name="del[]" value="<?= $poster['id'] ?>">刪除
-                    </td>
-                </tr>
+                    <tr>
+                        <td><img src="./img/<?= $poster['img'] ?>"></td>
+                        <td><input type="text" name="text[]" value="<?= $poster['text'] ?>"></td>
+                        <td>
+                            <button type="button" data-id="<?= $poster['id'] ?>" data-chg="<?= $posters[$up]['id'] ?>">往上</button>
+                            <button type="button" data-id="<?= $poster['id'] ?>" data-chg="<?= $posters[$down]['id'] ?>">往下</button>
+                            <select name="ani[]">
+                                <option value="1" <?= ($poster['ani'] == 1) ? "selected" : "" ?>>淡入淡出</option>
+                                <option value="2" <?= ($poster['ani'] == 2) ? "selected" : "" ?>>縮放</option>
+                                <option value="3" <?= ($poster['ani'] == 3) ? "selected" : "" ?>>滑入滑出</option>
+                            </select>
+                        </td>
+                        <td><input type="checkbox" name="sh[]" value="<?= $poster['id'] ?>" <?= ($poster['sh'] == 1) ? "checked" : "" ?>>隱藏
+                            <input type="checkbox" name="del[]" value="<?= $poster['id'] ?>">刪除
+                        </td>
+                    </tr>
+                    <input type="hidden" name="id[]" value="<?= $poster['id'] ?>">
                 <?php
                 }
                 ?>
@@ -77,3 +77,15 @@ tbody {
         <input type="reset" value="重置">
     </div>
 </form>
+<script>
+    $('button').on('click', function() {
+        let id = $(this).data('id');
+        let chg = $(this).data('chg');
+        $.post('./api/chg.php', {
+            id,
+            chg
+        }, function(res) {
+            location.reload();
+        })
+    })
+</script>
