@@ -4,6 +4,8 @@ include_once "db.php";
 // exit();
 foreach ($_POST['id'] as $idx => $id) {
     if (isset($_POST['del']) && in_array($id, $_POST['del'])) {
+        // $del = $Poster->find($id)['img'];
+        // unlink("../img/{$del}");
         $Poster->del($id);
     } else {
         $poster = $Poster->find($id);
