@@ -23,6 +23,7 @@ tbody {
     height: auto;
 }
 </style>
+<input type="button" value="新增電影" onclick="location.href='?do=movie-add'">
 <div style="height:300px;overflow:auto">
     <table>
         <tbody>
@@ -48,7 +49,9 @@ tbody {
                             data-chg="<?= $movies[$down]['id'] ?>">往下</button>
                         <input type="button" class="sh" data-id="<?= $movie['id'] ?>"
                             value=<?= ($movie['sh'] == 1) ? "顯示" : "隱藏" ?>>
-                        <input type="button" class="del" data-id="<?= $movie['id'] ?>" value="刪除">
+                        <input type="button" value="編輯電影"
+                            onclick="location.href='?do=movie-edit&id=<?= $movie['id'] ?>'">
+                        <input type="button" class="del" data-id="<?= $movie['id'] ?>" value="刪除電影">
                     </div>
                     <div><?= $movie['intro'] ?></div>
                 </td>
